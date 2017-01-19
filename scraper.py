@@ -1,18 +1,18 @@
 from bs4 import BeautifulSoup
 import requests
-from graphviz import Graph
+from graphviz import Digraph
         
 def startScrapin(sitename):
-    g1 = Graph(comment = 'Scraper Results')
+    g1 = Digraph(comment = 'Scraper Results')
     linklist = findTheLinks(sitename, g1)
     linklist = linklist.split()
     buildBranches(sitename, linklist, g1)
-    #for link in linklist:
+    for link in linklist:
         #print (link)
-        #sublinklist = findTheLinks(link, g1)
+        sublinklist = findTheLinks(link, g1)
         #print (sublinklist)
-        #if sublinklist: #check if list is empty
-            #buildBranches(link, sublinklist, g1)
+        if sublinklist: #check if list is empty
+            buildBranches(link, sublinklist, g1)
     createImage(g1)
     
 def clarifyExtension(link, sitename):
@@ -36,9 +36,7 @@ def findTheLinks(sitename, g1):
         requests.status_code = "Invalid URL"
         print (err)
      
-    
 def buildBranches(sitename, linklist, g1):
-    g1.node(sitename)
     for link in linklist:
         g1.node(link)
         g1.edge(sitename, link)
